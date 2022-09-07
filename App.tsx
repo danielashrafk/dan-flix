@@ -7,7 +7,6 @@ import { State } from "./src/reducers";
 import React, { useMemo, useRef, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { MovieScreen } from "./src/screens/MovieScreen";
 import { MovieData } from "./src/components/MovieData";
 import BottomSheet, {
   BottomSheetModal,
@@ -52,7 +51,7 @@ const App = () => {
                 }
               }
             />
-            <RootStack.Screen name="MovieScreen" component={MovieScreen} />
+            {/* <RootStack.Screen name="MovieScreen" component={MovieScreen} /> */}
           </RootStack.Navigator>
 
           {/* {showMovie && <MovieData movies={[]} setShowMovie={setShowMovie} />} */}
