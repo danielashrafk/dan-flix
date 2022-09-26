@@ -1,6 +1,6 @@
-import { ActionType } from "../constants/actionTypes";
+import { ActionType } from "../../utils/constants";
 
-import { IMovie, MovieState } from "../models";
+import { MovieState } from "../models";
 
 interface FetchAction {
   readonly type: ActionType.FETCH_ALL;
@@ -22,8 +22,6 @@ const movieReducer = (
 ) => {
   switch (action.type) {
     case ActionType.FETCH_ALL:
-      //   console.log(action);
-      //   consolsse.log("hi");
       return { ...movies, movies: action.payload };
 
     default:

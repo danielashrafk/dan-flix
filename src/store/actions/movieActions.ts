@@ -1,11 +1,11 @@
 import { Dispatch } from "redux";
-import { AxiosError } from "axios";
-import * as api from "../api";
-import { ActionType } from "../constants/actionTypes";
+import * as api from "../../services/api";
+import { ActionType } from "../../utils/constants";
 import { Action } from "../reducers/movieReducer";
 import { genreAction } from "../reducers/genreReducer";
-import { MovieState } from "../models";
 import * as _ from "lodash";
+import { apiGenreState } from "../models";
+import { _getGenres } from "../../utils/genres";
 
 export const getMovies = () => {
   return async (dispatch: Dispatch<Action>) => {
@@ -15,7 +15,6 @@ export const getMovies = () => {
       return data.data;
     } catch (error: any) {
       console.log(error.response.data);
-      // console.log(error);
       return error.response.data;
     }
   };
@@ -26,19 +25,14 @@ export const getGenres = (genres: Optional<number[]> = []) => {
     try {
       const { data } = await api.fetchGenres();
       const genreData = data["genres"];
-      // console.log(genreData);
-      let result: any[] = [];
-      for (let i = 0; i < genres?.length; i++) {
-        let temp = _.filter(genreData, { id: genres?.[i] });
-        result.push(temp[0]["name"]);
-      }
+
+      let result = _getGenres(genres, genreData);
 
       dispatch({ type: ActionType.FETCH_GENRES, payload: result });
-      // console.log(data);
+
       return result;
     } catch (error: any) {
       console.log(error.response.data);
-      // console.log(error);
       return error.response.data;
     }
   };

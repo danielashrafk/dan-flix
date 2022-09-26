@@ -1,5 +1,3 @@
-import { useNavigation } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React, { useEffect, useRef, useState } from "react";
 import * as _ from "lodash";
 import * as Font from "expo-font";
@@ -10,35 +8,16 @@ import {
   StyleSheet,
   Image,
   PixelRatio,
-  FlatList,
   Animated,
   TouchableOpacity,
-  TouchableHighlightBase,
-  TouchableHighlight,
-  TouchableWithoutFeedback,
-  TouchableWithoutFeedbackComponent,
 } from "react-native";
-import { IMovie, MovieState } from "../models";
-import { RootStackParams } from "../../App";
+import { IMovie, MovieState } from "../../store/models";
+import { baseImgUrl } from "../../utils/constants";
+import { getDay, getMonth, partitionDates } from "../../utils/dates";
 
-var months = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
-const baseImgUrl = "https://image.tmdb.org/t/p";
 const ITEM_SIZE = 500 / PixelRatio.get();
 const size = "original";
-let partitionedArray: Array<Array<IMovie>> = [];
+let partitionedDates: Array<Array<IMovie>> = [];
 
 interface Props {
   movies: MovieState["movies"];
@@ -55,51 +34,13 @@ export const UpcomingMovieList: React.FC<Props> = ({
   const [fontsLoaded, setFontsLoaded] = useState(false);
 
   useEffect(() => {
-    const uniqueDates = _.orderBy(
-      _.uniq(_.map(movies, "release_date")),
-      [],
-      ["asc"]
-    );
-
-    uniqueDates.map((date) => {
-      partitionedArray.push(_.filter(movies, ["release_date", date]));
-    });
-
+    partitionedDates = partitionDates(movies);
     loadFonts();
   }, [movies]);
 
-  const navigation =
-    useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const [selectedId, setSelectedId] = useState("");
 
-  const getMonth = (date: Date) => {
-    const month = date.toString().split("-")[1];
-
-    return months[parseInt(month) - 1];
-  };
-
-  const getDay = (date: Date) => {
-    let month = date.toString().split("-")[2];
-    if (_.isEqual(month.charAt(0), "0")) {
-      month = month.charAt(month.length - 1);
-    }
-    if (
-      (month.length > 1 && !_.isEqual(month.charAt(month.length - 2), "1")) ||
-      month.length == 1
-    ) {
-      if (_.isEqual(month.charAt(month.length - 1), "1")) {
-        return month + "st";
-      } else if (_.isEqual(month.charAt(month.length - 1), "2")) {
-        return month + "nd";
-      } else if (_.isEqual(month.charAt(month.length - 1), "3")) {
-        return month + "rd";
-      }
-    }
-    return month + "th";
-  };
-
   const onPress = (movies: MovieState["movies"]) => {
-    // navigation.navigate("MovieScreen", { id });
     showUpcomingMoviesModal();
     setCurrentUpcomingMovies(movies);
     setUpcomingMoviesDate(
@@ -109,7 +50,7 @@ export const UpcomingMovieList: React.FC<Props> = ({
 
   const loadFonts = async () => {
     await Font.loadAsync({
-      OpenSans: require("../../assets/fonts/OpenSans.ttf"),
+      OpenSans: require("../../../assets/fonts/OpenSans.ttf"),
     });
 
     setFontsLoaded(true);
@@ -137,9 +78,6 @@ export const UpcomingMovieList: React.FC<Props> = ({
         <TouchableOpacity onPress={() => onPress(item)}>
           <Animated.View
             style={{
-              //   backgroundColor: "#eeeeee",
-              //   borderRadius: 10,
-              //   padding: 20,
               marginVertical: 16 / PixelRatio.get(),
               marginHorizontal: 64 / PixelRatio.get(),
               transform: [{ translateY }],
@@ -149,16 +87,8 @@ export const UpcomingMovieList: React.FC<Props> = ({
               backgroundColor: "#101010",
               width: ITEM_SIZE,
               height: "80%",
-              // justifyContent: "center",
             }}
           >
-            {/* <Image
-            style={styles.moviePoster}
-            source={{
-              uri: `${baseImgUrl}/${size}/${item[item.length - 1].poster_path}`,
-            }}
-          /> */}
-
             {fontsLoaded && (
               <>
                 <View style={{ flexDirection: "row" }}>
@@ -236,7 +166,7 @@ export const UpcomingMovieList: React.FC<Props> = ({
     <View style={styles.container}>
       <Animated.FlatList
         contentContainerStyle={styles.movieList}
-        data={partitionedArray}
+        data={partitionedDates}
         renderItem={({ item, index }) => <Item item={item} index={index} />}
         // keyExtractor={(item) => item[item.length - 1].id}
         extraData={selectedId}

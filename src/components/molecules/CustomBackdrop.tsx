@@ -1,11 +1,10 @@
 import React, { useMemo } from "react";
-import { BottomSheetBackdropProps } from "@gorhom/bottom-sheet";
 import Animated, {
   Extrapolate,
   interpolate,
   useAnimatedStyle,
 } from "react-native-reanimated";
-import { Image, PixelRatio, StyleSheet } from "react-native";
+import { Image, StyleSheet } from "react-native";
 
 const CustomBackdrop = React.memo(({ animatedIndex, style, imageURI }: any) => {
   // animated variables

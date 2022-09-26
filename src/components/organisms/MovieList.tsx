@@ -3,24 +3,16 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React, { useEffect, useRef, useState } from "react";
 import {
   View,
-  Text,
   StyleSheet,
   Image,
   PixelRatio,
-  FlatList,
   Animated,
   TouchableOpacity,
-  TouchableHighlightBase,
-  TouchableHighlight,
-  TouchableWithoutFeedback,
-  TouchableWithoutFeedbackComponent,
 } from "react-native";
-import { IMovie, MovieState } from "../models";
-import { RootStackParams } from "../../App";
-import { MovieData } from "./MovieData";
+import { IMovie, MovieState } from "../../store/models";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
+import { baseImgUrl } from "../../utils/constants";
 
-const baseImgUrl = "https://image.tmdb.org/t/p";
 const ITEM_SIZE = 500 / PixelRatio.get();
 const size = "original";
 
@@ -28,18 +20,14 @@ interface Props {
   movies: MovieState["movies"];
   setCurrentMovie: (currentMovie: IMovie) => void;
   onMoviePress: () => void;
-  // reference: any;
 }
 
 export const MovieList = React.memo(
   React.forwardRef<BottomSheetModal, Props>(
     ({ movies, setCurrentMovie, onMoviePress }, ref) => {
-      // const navigation =
-      //   useNavigation<NativeStackNavigationProp<RootStackParams>>();
       const [selectedId, setSelectedId] = useState("");
 
       const onPress = (item: IMovie) => {
-        // navigation.navigate("MovieScreen", { id });
         setCurrentMovie(item);
         onMoviePress();
       };
@@ -65,9 +53,6 @@ export const MovieList = React.memo(
           return (
             <Animated.View
               style={{
-                //   backgroundColor: "#eeeeee",
-                //   borderRadius: 10,
-                //   padding: 20,
                 marginVertical: 16 / PixelRatio.get(),
                 marginHorizontal: 64 / PixelRatio.get(),
                 transform: [{ translateY }],
@@ -105,8 +90,6 @@ export const MovieList = React.memo(
             scrollEventThrottle={16}
             initialNumToRender={2}
           />
-
-          {/* <MovieData movie={currentMovie} setShowMovie={setShowMovie} ref={ref} /> */}
         </View>
       );
     }

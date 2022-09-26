@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, PixelRatio } from "react-native";
-import { IMovie, MovieState } from "../models";
+import type { IMovie } from "../../store/models";
 import * as Font from "expo-font";
-import { BottomSheetModal } from "@gorhom/bottom-sheet";
+import type { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { useDispatch, useSelector } from "react-redux";
-import { getGenres } from "../actions/movieActions";
-import { State } from "../reducers";
+import { getGenres } from "../../store/actions/movieActions";
+import type { State } from "../../store/reducers";
 
-interface Props {
+type Props = {
   movie?: IMovie;
   readMore: boolean;
-  // reference: any;
-}
+};
 
 export const MovieData = React.memo(
   React.forwardRef<BottomSheetModal, Props>(({ movie, readMore }, ref) => {
@@ -27,7 +26,7 @@ export const MovieData = React.memo(
 
     const loadFonts = async () => {
       await Font.loadAsync({
-        OpenSans: require("../../assets/fonts/OpenSans.ttf"),
+        OpenSans: require("../../../assets/fonts/OpenSans.ttf"),
       });
 
       setFontsLoaded(true);
@@ -43,7 +42,7 @@ export const MovieData = React.memo(
               marginTop: 10 / PixelRatio.get(),
             }}
           >
-            {(genreState?.["genres"] as string[])?.map((genre) => (
+            {genreState?.genres?.map((genre) => (
               <View
                 key={genre}
                 style={{

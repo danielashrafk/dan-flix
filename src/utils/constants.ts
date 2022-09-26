@@ -4,3 +4,5 @@ export enum ActionType {
   FETCH_UPCOMING = "fetch_upcoming",
   FETCH_GENRES = "fetch_genres",
 }
+
+export const baseImgUrl = "https://image.tmdb.org/t/p";

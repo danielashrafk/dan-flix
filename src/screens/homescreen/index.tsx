@@ -1,88 +1,29 @@
 import React, {
   useState,
   useEffect,
-  forwardRef,
   useRef,
   useMemo,
   useCallback,
 } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  PixelRatio,
-  Animated,
-  Dimensions,
-  FlatList,
-  TouchableWithoutFeedback,
-} from "react-native";
+import { View, Text, StyleSheet, Image, PixelRatio } from "react-native";
 import * as Font from "expo-font";
 import { useDispatch, useSelector } from "react-redux";
-// import * as movieActionCreators from "../actions/movieActions";
-// import * as imageActionCreators from "../actions/imageActions";
-import { bindActionCreators } from "redux";
-import { State } from "../reducers";
-import { IMovie, MovieState } from "../models";
-import { getGenres, getMovies } from "../actions/movieActions";
-import { getImages } from "../actions/imageActions";
-import { MovieList } from "../components/MovieList";
+import { State } from "../../store/reducers";
+import { IMovie, MovieState } from "../../store/models";
+import { getMovies } from "../../store/actions/movieActions";
+import { MoviesList } from "./MoviesList";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { RootStackParams } from "../../App";
-import MaskedView from "@react-native-masked-view/masked-view";
-import Svg, { Rect } from "react-native-svg";
-import { LinearGradient } from "expo-linear-gradient";
-import { getUpcomingMovies } from "../actions/upcomingMovieAction";
-import { UpcomingMovieList } from "../components/UpcomingMovieList";
-import { MovieData } from "../components/MovieData";
-import { RotateInUpLeft } from "react-native-reanimated";
-import {
-  BottomSheetBackdrop,
-  BottomSheetModal,
-  useBottomSheet,
-} from "@gorhom/bottom-sheet";
+import { RootStackParams } from "../../navigation";
+import { getUpcomingMovies } from "../../store/actions/upcomingMovieAction";
+import { UpcomingMovieList } from "../../components/organisms/UpcomingMovieList";
+import { MovieData } from "../../components/ecosystems/MovieData";
+import { BottomSheetBackdrop, BottomSheetModal } from "@gorhom/bottom-sheet";
 import Modal from "react-native-modal";
+import { getCurrentDate } from "../../utils/dates";
+import CustomBackdrop from "../../components/molecules/CustomBackdrop";
+import { UpcomingMovieData } from "../../components/ecosystems/UpcomingMovieData";
+import { baseImgUrl } from "../../utils/constants";
 
-import bottomSheetBackground from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackground";
-
-import CustomBackdrop from "../components/CustomBackdrop";
-import { UpcomingMovieData } from "../components/UpcomingMovieData";
-
-const getCurrentDate = () => {
-  var months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
-
-  var date = new Date().getDate();
-  var month = new Date().getMonth();
-
-  //Alert.alert(date + '-' + month + '-' + year);
-  // You can turn it in to your desired format
-  return "Today, " + date + " " + months[month]; //format: dd-mm-yyyy;
-};
-
-// interface ItemProps {
-//   item: IMovie;
-
-//   onPress: () => void;
-
-//   backgroundColor: String;
-
-//   textColor: String;
-// }
-
-const baseImgUrl = "https://image.tmdb.org/t/p";
 const size = "original";
 
 type Props = NativeStackScreenProps<RootStackParams, "HomeScreen">;
@@ -99,14 +40,13 @@ export const HomeScreen: React.FC<Props> = ({ route }) => {
     useState<Optional<MovieState["movies"]>>();
   const [isUpcomingMoviesModalVisible, setUpcomingMoviesModalVisible] =
     useState(false);
-  const movieState = useSelector((state: State) => state.movies);
+
   const upcomingMovieState = useSelector(
     (state: State) => state.upcomingMovies
   );
 
   const onMoviePress = () => {
     sheetRef.current?.present();
-    // sheetRef.current?.expand();
   };
   const showUpcomingMoviesModal = () => {
     setUpcomingMoviesModalVisible(!isUpcomingMoviesModalVisible);
@@ -115,14 +55,8 @@ export const HomeScreen: React.FC<Props> = ({ route }) => {
 
   useEffect(() => {
     loadFonts();
-    dispatch(getMovies() as any);
+
     dispatch(getUpcomingMovies() as any);
-    // dispatch(getGenres() as any);
-    // console.log(upcomingMovieState?.["movies"]?.["results"]);
-    // dispatch(getImages("438148") as any);
-    // console.log(movieState?.["movies"]?.["results"]);
-    // console.log(imageState);
-    // console.log(`${baseImgUrl}/${size}/wKiOkZTN9lUUUNZLmtnwubZYONg.jpg`);
   }, [dispatch]);
 
   const loadFonts = async () => {
@@ -133,8 +67,6 @@ export const HomeScreen: React.FC<Props> = ({ route }) => {
     setFontsLoaded(true);
   };
 
-  const scrollX = React.useRef(new Animated.Value(0)).current;
-
   const handleSheetChanges = useCallback((index: number) => {
     if (index > 0) {
       setReadMore(true);
@@ -142,20 +74,6 @@ export const HomeScreen: React.FC<Props> = ({ route }) => {
       setReadMore(false);
     }
   }, []);
-
-  // const customBackground = () => {
-  //   return (
-  //     <BottomSheetBackground
-  //       style={{ backgroundColor: "white" }}
-  //       animatedIndex={{
-  //         value: 0,
-  //       }}
-  //       animatedPosition={{
-  //         value: 0,
-  //       }}
-  //     />
-  //   );
-  // };
 
   return (
     <>
@@ -178,28 +96,10 @@ export const HomeScreen: React.FC<Props> = ({ route }) => {
         </View>
 
         <View style={styles.body}>
-          {/* {(movieState?.["movies"]?.["results"] as MovieState["movies"])?.map(
-          (item) => (
-            <>
-              <Text style={{ color: "white" }}>{item.original_title}</Text>
-              <Image
-                source={{
-                  uri: `${baseImgUrl}/${size}/wKiOkZTN9lUUUNZLmtnwubZYONg.jpg`,
-                }}
-              />
-            </>
-          )
-        )} */}
-
           <View style={styles.movieList}>
-            <MovieList
-              movies={
-                movieState?.["movies"]?.["results"] as MovieState["movies"]
-              }
+            <MoviesList
               setCurrentMovie={setCurrentMovie}
-              ref={sheetRef}
               onMoviePress={onMoviePress}
-              // reference={route.params.reference}
             />
           </View>
 
@@ -228,8 +128,6 @@ export const HomeScreen: React.FC<Props> = ({ route }) => {
       <BottomSheetModal
         ref={sheetRef}
         snapPoints={snapPoints}
-        // enablePanDownToClose={true}
-        // style={styles.movieData}
         backgroundComponent={() => <View style={styles.bottomSheet} />}
         backdropComponent={(props) => (
           <BottomSheetBackdrop {...props} opacity={1}>
@@ -268,7 +166,7 @@ const styles = StyleSheet.create({
 
   navigation: {
     flex: 3,
-    // textAlign: "left",
+
     justifyContent: "space-between",
     flexDirection: "row",
     alignItems: "center",
@@ -281,10 +179,7 @@ const styles = StyleSheet.create({
 
   body: {
     flex: 12,
-    // justifyContent: "center",
-    // alignItems: "center",
-    // flexDirection: "row",
-    // backgroundColor: "#2E2E2E",
+
     paddingTop: 0 / PixelRatio.get(),
   },
 
@@ -315,7 +210,6 @@ const styles = StyleSheet.create({
     borderRadius: 150 / PixelRatio.get() / 2,
     overflow: "hidden",
     borderWidth: 3,
-    // borderColor: "red",
   },
   movieList: {
     flex: 7,
@@ -323,9 +217,6 @@ const styles = StyleSheet.create({
   upcomingMovieList: {
     flex: 5,
     paddingTop: 30 / PixelRatio.get(),
-    // justifyContent: "center",
-    // flexDirection: "row",
-    // alignItems: "center",
   },
   secondTitle: {
     fontFamily: "OpenSans",
@@ -342,7 +233,6 @@ const styles = StyleSheet.create({
   upcomingMoviesWrap: {
     flex: 4,
   },
-  // movieData: { backgroundColor: "black" },
 
   bottomSheet: {
     ...StyleSheet.absoluteFillObject,
