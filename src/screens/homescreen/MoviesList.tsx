@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { State } from "../../store/reducers";
 import { IMovie, MovieState } from "../../store/models";
 import { getMovies } from "../../store/actions/movieActions";
-import { MovieList } from "../../components/organisms/MovieList";
+import { MovieList } from "../../components/organisms/movieList/MovieList";
 
 type Props = {
   onMoviePress: () => void;

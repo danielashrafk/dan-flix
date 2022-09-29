@@ -1,29 +1,39 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { State } from "../../store/reducers";
-import { IMovie, MovieState } from "../../store/models";
-import { getMovies } from "../../store/actions/movieActions";
-import { MovieList } from "../../components/organisms/MovieList";
+import { MovieState } from "../../store/models";
+import { UpcomingMovieList } from "../../components/organisms/upcomingMovieList/UpcomingMovieList";
+import { getUpcomingMovies } from "../../store/actions/upcomingMovieAction";
 
 type Props = {
-  onMoviePress: () => void;
-  setCurrentMovie: (movie: Optional<IMovie>) => void;
+  showUpcomingMoviesModal: () => void;
+  setCurrentUpcomingMovies: (movie: Optional<MovieState["movies"]>) => void;
+  setUpcomingMoviesDate: (date: string) => void;
 };
-export const MoviesList = ({ onMoviePress, setCurrentMovie }: Props) => {
+export const UpcomingMovies = ({
+  showUpcomingMoviesModal,
+  setCurrentUpcomingMovies,
+  setUpcomingMoviesDate,
+}: Props) => {
   const dispatch = useDispatch();
 
-  const movieState = useSelector((state: State) => state.movies);
+  const upcomingMovieState = useSelector(
+    (state: State) => state.upcomingMovies
+  );
 
   useEffect(() => {
-    dispatch(getMovies() as any);
+    dispatch(getUpcomingMovies() as any);
   }, [dispatch]);
 
   return (
     <>
-      <MovieList
-        movies={movieState?.["movies"]?.["results"] as MovieState["movies"]}
-        setCurrentMovie={setCurrentMovie}
-        onMoviePress={onMoviePress}
+      <UpcomingMovieList
+        movies={
+          upcomingMovieState?.["movies"]?.["results"] as MovieState["movies"]
+        }
+        showUpcomingMoviesModal={showUpcomingMoviesModal}
+        setCurrentUpcomingMovies={setCurrentUpcomingMovies}
+        setUpcomingMoviesDate={setUpcomingMoviesDate}
       />
     </>
   );

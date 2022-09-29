@@ -7,21 +7,19 @@ import React, {
 } from "react";
 import { View, Text, StyleSheet, Image, PixelRatio } from "react-native";
 import * as Font from "expo-font";
-import { useDispatch, useSelector } from "react-redux";
-import { State } from "../../store/reducers";
+import { useDispatch } from "react-redux";
 import { IMovie, MovieState } from "../../store/models";
-import { getMovies } from "../../store/actions/movieActions";
 import { MoviesList } from "./MoviesList";
+import { UpcomingMovies } from "./UpcomingMovies";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParams } from "../../navigation";
 import { getUpcomingMovies } from "../../store/actions/upcomingMovieAction";
-import { UpcomingMovieList } from "../../components/organisms/UpcomingMovieList";
-import { MovieData } from "../../components/ecosystems/MovieData";
+import { MovieData } from "../../components/ecosystems/movieData/MovieData";
 import { BottomSheetBackdrop, BottomSheetModal } from "@gorhom/bottom-sheet";
 import Modal from "react-native-modal";
 import { getCurrentDate } from "../../utils/dates";
 import CustomBackdrop from "../../components/molecules/CustomBackdrop";
-import { UpcomingMovieData } from "../../components/ecosystems/UpcomingMovieData";
+import { UpcomingMovieData } from "../../components/ecosystems/upcomingMovieData/UpcomingMovieData";
 import { baseImgUrl } from "../../utils/constants";
 
 const size = "original";
@@ -41,10 +39,6 @@ export const HomeScreen: React.FC<Props> = ({ route }) => {
   const [isUpcomingMoviesModalVisible, setUpcomingMoviesModalVisible] =
     useState(false);
 
-  const upcomingMovieState = useSelector(
-    (state: State) => state.upcomingMovies
-  );
-
   const onMoviePress = () => {
     sheetRef.current?.present();
   };
@@ -61,7 +55,7 @@ export const HomeScreen: React.FC<Props> = ({ route }) => {
 
   const loadFonts = async () => {
     await Font.loadAsync({
-      OpenSans: require("../../assets/fonts/OpenSans.ttf"),
+      OpenSans: require("../../../assets/fonts/OpenSans.ttf"),
     });
 
     setFontsLoaded(true);
@@ -109,12 +103,7 @@ export const HomeScreen: React.FC<Props> = ({ route }) => {
             </View>
 
             <View style={styles.upcomingMoviesWrap}>
-              <UpcomingMovieList
-                movies={
-                  upcomingMovieState?.["movies"]?.[
-                    "results"
-                  ] as MovieState["movies"]
-                }
+              <UpcomingMovies
                 showUpcomingMoviesModal={showUpcomingMoviesModal}
                 setCurrentUpcomingMovies={setCurrentUpcomingMovies}
                 setUpcomingMoviesDate={setUpcomingMoviesDate}
@@ -144,7 +133,7 @@ export const HomeScreen: React.FC<Props> = ({ route }) => {
 
       <Modal
         isVisible={isUpcomingMoviesModalVisible}
-        onBackdropPress={() => showUpcomingMoviesModal()}
+        onBackdropPress={showUpcomingMoviesModal}
         backdropOpacity={0.1}
         animationIn="pulse"
         style={{ justifyContent: "center", alignItems: "center" }}

@@ -12,3 +12,18 @@ export type RootStackParams = {
   };
 };
 export const RootStack = createNativeStackNavigator<RootStackParams>();
+
+export const MainStack = () => {
+  return (
+    <RootStack.Navigator
+      screenOptions={{ headerShown: false }}
+      initialRouteName="HomeScreen"
+    >
+      <RootStack.Screen
+        name="HomeScreen"
+        component={HomeScreen}
+        initialParams={{}}
+      />
+    </RootStack.Navigator>
+  );
+};
