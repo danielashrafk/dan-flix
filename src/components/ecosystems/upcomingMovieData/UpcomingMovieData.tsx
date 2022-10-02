@@ -16,35 +16,25 @@ type Props = {
 export const UpcomingMovieData = React.memo(
   React.forwardRef<BottomSheetModal, Props>(
     ({ movies, upcomingMoviesDate }, ref) => {
-      useEffect(() => {
-        loadFonts();
-      }, []);
+      useEffect(() => {}, []);
 
-      const [fontsLoaded, setFontsLoaded] = useState(false);
-
-      const loadFonts = async () => {
-        await Font.loadAsync({
-          OpenSans: require("../../../../assets/fonts/OpenSans.ttf"),
-        });
-
-        setFontsLoaded(true);
-      };
-
-      const Item = React.memo(({ item }: { item: IMovie; index: number }) => (
-        <View style={styles.itemBody}>
-          <View style={styles.itemData}>
-            <Text style={styles.itemTitle}>{item.title}</Text>
+      const Item = React.memo(
+        ({ item, index }: { item: IMovie; index: number }) => (
+          <View style={styles.itemBody}>
+            <View style={styles.itemData}>
+              <Text style={styles.itemTitle}>{item.title}</Text>
+            </View>
+            <View style={styles.itemImageData}>
+              <Image
+                style={styles.itemImage}
+                source={{
+                  uri: `${baseImgUrl}/${size}/${item.poster_path}`,
+                }}
+              />
+            </View>
           </View>
-          <View style={styles.itemImageData}>
-            <Image
-              style={styles.itemImage}
-              source={{
-                uri: `${baseImgUrl}/${size}/${item.poster_path}`,
-              }}
-            />
-          </View>
-        </View>
-      ));
+        )
+      );
       const scrollX = React.useRef(new Animated.Value(0)).current;
       return (
         <View style={styles.modal}>

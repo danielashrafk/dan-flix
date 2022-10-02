@@ -1,37 +1,26 @@
 import React, { useEffect, useState } from "react";
 import { View, Text } from "react-native";
 import type { IMovie } from "../../../store/models";
-import * as Font from "expo-font";
 import type { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { useDispatch, useSelector } from "react-redux";
 import { getGenres } from "../../../store/actions/movieActions";
 import type { State } from "../../../store/reducers";
 import styles from "./styles";
+import { useRecoilValue } from "recoil";
+import { readMoreState } from "../../../store/atom";
 
 type Props = {
   movie?: IMovie;
-  readMore: boolean;
 };
 
 export const MovieData = React.memo(
-  React.forwardRef<BottomSheetModal, Props>(({ movie, readMore }, ref) => {
+  React.forwardRef<BottomSheetModal, Props>(({ movie }, ref) => {
     const dispatch = useDispatch();
 
     const genreState = useSelector((state: State) => state.genres);
     useEffect(() => {
       dispatch(getGenres(movie?.genre_ids) as any);
-      loadFonts();
-    }, []);
-
-    const [fontsLoaded, setFontsLoaded] = useState(false);
-
-    const loadFonts = async () => {
-      await Font.loadAsync({
-        OpenSans: require("../../../../assets/fonts/OpenSans.ttf"),
-      });
-
-      setFontsLoaded(true);
-    };
+    }, [dispatch]);
 
     return (
       <View style={styles.container}>
@@ -49,7 +38,7 @@ export const MovieData = React.memo(
           <Text style={styles.movieTitle}>Overview</Text>
           <Text
             style={styles.overviewBody}
-            numberOfLines={!readMore ? 2 : undefined}
+            numberOfLines={!useRecoilValue(readMoreState) ? 2 : undefined}
           >
             {movie?.overview}
           </Text>

@@ -7,7 +7,7 @@ export default StyleSheet.create({
   },
 
   movieTitle: {
-    fontFamily: "OpenSans",
+    fontFamily: "Arial",
     color: "white",
     letterSpacing: -1,
     fontSize: 50 / PixelRatio.get(),
@@ -30,7 +30,7 @@ export default StyleSheet.create({
   },
 
   itemTitle: {
-    fontFamily: "OpenSans",
+    fontFamily: "Arial",
     color: "#707070",
     fontSize: 30 / PixelRatio.get(),
     paddingBottom: 20 / PixelRatio.get(),

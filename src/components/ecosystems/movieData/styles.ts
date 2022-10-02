@@ -10,14 +10,14 @@ export default StyleSheet.create({
   titleArea: {},
 
   movieTitle: {
-    fontFamily: "OpenSans",
+    fontFamily: "Arial",
     color: "white",
     letterSpacing: -1,
     fontSize: 50 / PixelRatio.get(),
   },
 
   genre: {
-    fontFamily: "OpenSans",
+    fontFamily: "Arial",
     color: "#707070",
     letterSpacing: 0,
     fontSize: 30 / PixelRatio.get(),
@@ -26,7 +26,7 @@ export default StyleSheet.create({
     marginTop: 100 / PixelRatio.get(),
   },
   overviewBody: {
-    fontFamily: "OpenSans",
+    fontFamily: "Arial",
     color: "#707070",
     marginTop: 20 / PixelRatio.get(),
   },

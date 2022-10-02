@@ -112,11 +112,8 @@ export const UpcomingMovieList: React.FC<Props> = ({
   setCurrentUpcomingMovies,
   setUpcomingMoviesDate,
 }) => {
-  const [fontsLoaded, setFontsLoaded] = useState(false);
-
   useEffect(() => {
     partitionedDates = partitionDates(movies);
-    loadFonts();
   }, [movies]);
 
   const [selectedId, setSelectedId] = useState("");
@@ -127,14 +124,6 @@ export const UpcomingMovieList: React.FC<Props> = ({
     setUpcomingMoviesDate(
       `${getDay(movies[0].release_date)} of ${getMonth(movies[0].release_date)}`
     );
-  };
-
-  const loadFonts = async () => {
-    await Font.loadAsync({
-      OpenSans: require("../../../../assets/fonts/OpenSans.ttf"),
-    });
-
-    setFontsLoaded(true);
   };
 
   const scrollX = React.useRef(new Animated.Value(0)).current;

@@ -1,28 +1,27 @@
-import { HomeScreen } from "./src/screens/homescreen";
 import { Provider } from "react-redux";
 import { store } from "./src/store";
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
-import { RootStack } from "./src/navigation";
+import { MainStack, RootStack } from "./src/navigation";
+import {
+  RecoilRoot,
+  atom,
+  selector,
+  useRecoilState,
+  useRecoilValue,
+} from "recoil";
 
 export default function App() {
   return (
-    <Provider store={store}>
-      <NavigationContainer>
-        <BottomSheetModalProvider>
-          <RootStack.Navigator
-            screenOptions={{ headerShown: false }}
-            initialRouteName="HomeScreen"
-          >
-            <RootStack.Screen
-              name="HomeScreen"
-              component={HomeScreen}
-              initialParams={{}}
-            />
-          </RootStack.Navigator>
-        </BottomSheetModalProvider>
-      </NavigationContainer>
-    </Provider>
+    <RecoilRoot>
+      <Provider store={store}>
+        <NavigationContainer>
+          <BottomSheetModalProvider>
+            <MainStack />
+          </BottomSheetModalProvider>
+        </NavigationContainer>
+      </Provider>
+    </RecoilRoot>
   );
 }

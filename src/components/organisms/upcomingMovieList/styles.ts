@@ -22,7 +22,7 @@ export default StyleSheet.create({
   itemDay: {
     color: "#8A8A8A",
     alignItems: "flex-start",
-    fontFamily: "OpenSans",
+    // fontFamily: "Arial",
     marginTop: 50 / PixelRatio.get(),
     marginLeft: 100 / PixelRatio.get(),
     fontSize: 70 / PixelRatio.get(),
@@ -30,7 +30,7 @@ export default StyleSheet.create({
   itemMonth: {
     color: "#454545",
     textAlign: "left",
-    fontFamily: "OpenSans",
+    // fontFamily: "Arial",
     marginLeft: 100 / PixelRatio.get(),
     fontSize: 40 / PixelRatio.get(),
   },
