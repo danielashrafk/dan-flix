@@ -1,6 +1,6 @@
-import { ActionType } from "../constants/actionTypes";
+import { ActionType } from "../../utils/constants";
 
-import { genreState, IMovie, MovieState } from "../models";
+import { genreState } from "../models";
 
 interface FetchAction {
   readonly type: ActionType.FETCH_GENRES;
@@ -18,8 +18,6 @@ const genreReducer = (
 ) => {
   switch (action.type) {
     case ActionType.FETCH_GENRES:
-      //   console.log(action);
-      //   consolsse.log("hi");
       return { ...genres, genres: action.payload };
 
     default:
